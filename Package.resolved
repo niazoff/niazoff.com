@@ -41,9 +41,9 @@
         "package": "Publish",
         "repositoryURL": "https://github.com/johnsundell/publish.git",
         "state": {
-          "branch": null,
-          "revision": "e77aab786992350ea92333737fdb3d7cad3ca8fc",
-          "version": "0.7.0"
+          "branch": "master",
+          "revision": "81859a8ff1c500e297530df34cd18d4406aecd39",
+          "version": null
         }
       },
       {
