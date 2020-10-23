@@ -27,7 +27,7 @@ try niazoff.com().publish(withTheme: .default(
   copyright: "Natanel Niazoff",
   twitterURL: "https://twitter.com/niazoff",
   githubURL: "https://github.com/niazoff"
-), deployedUsing: .gitHub("niazoff/niazoff.com", branch: "release", useSSH: false),
+), deployedUsing: .gitHub("niazoff/niazoff.com-release", useSSH: false),
 additionalSteps: [
   .addAppMarkdownFiles()
 ], plugins: [
