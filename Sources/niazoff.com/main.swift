@@ -24,6 +24,7 @@ try niazoff.com().publish(withTheme: .default(
   additionalStylesheetPaths: ["/apps.css"],
   pagePaths: ["apps", "about"],
   contentPagePaths: ["about"],
+  navigationLinks: [.init(name: "Résumé", url: "https://s3.amazonaws.com/niazoff.com/resume.pdf")],
   copyright: "Natanel Niazoff",
   twitterURL: "https://twitter.com/niazoff",
   githubURL: "https://github.com/niazoff"

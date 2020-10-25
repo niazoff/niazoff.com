@@ -7,6 +7,7 @@ extension Theme {
     additionalStylesheetPaths: [Path] = [],
     pagePaths: [Path] = [],
     contentPagePaths: [Path] = [],
+    navigationLinks: [DefaultNavigationLink] = [],
     copyright: String,
     twitterURL: URLRepresentable? = nil,
     githubURL: URLRepresentable? = nil) -> Self {
@@ -14,11 +15,17 @@ extension Theme {
       additionalStylesheetPaths: additionalStylesheetPaths,
       pagePaths: pagePaths,
       contentPagePaths: contentPagePaths,
+      navigationLinks: navigationLinks,
       copyright: copyright,
       twitterURL: twitterURL,
       githubURL: githubURL
     ))
   }
+}
+
+struct DefaultNavigationLink {
+  let name: String
+  let url: URLRepresentable
 }
 
 private struct DefaultHTMLFactory<Site: Website>: HTMLFactory {
@@ -29,6 +36,7 @@ private struct DefaultHTMLFactory<Site: Website>: HTMLFactory {
   var additionalStylesheetPaths: [Path] = []
   var pagePaths: [Path] = []
   var contentPagePaths: [Path] = []
+  var navigationLinks: [DefaultNavigationLink] = []
   var copyright: String
   var twitterURL: URLRepresentable?
   var githubURL: URLRepresentable?
@@ -45,7 +53,7 @@ private struct DefaultHTMLFactory<Site: Website>: HTMLFactory {
     .lang(context.site.language),
     .head(for: item, on: context.site, stylesheetPaths: stylesheetPaths + additionalStylesheetPaths),
     .body(
-      .header(for: context, pagePaths: pagePaths, selectedSection: item.sectionID),
+      .header(for: context, pagePaths: pagePaths, navigationLinks: navigationLinks, selectedSection: item.sectionID),
       .div(.class("content"), .id("item-page-content"),
         .h1(.text(item.title)),
         .h2(.id("item-page-date"),
@@ -61,7 +69,7 @@ private struct DefaultHTMLFactory<Site: Website>: HTMLFactory {
     .lang(context.site.language),
     .head(for: page, on: context.site, stylesheetPaths: stylesheetPaths + additionalStylesheetPaths),
     .body(
-      .header(for: context, pagePaths: pagePaths, selectedPage: page),
+      .header(for: context, pagePaths: pagePaths, navigationLinks: navigationLinks, selectedPage: page),
       .div(.id("page"), .if(contentPagePaths.contains(page.path), .class("content")),
         .contentBody(page.body.removingH1())),
       .div(.class("spacer")),
@@ -76,7 +84,7 @@ private struct DefaultHTMLFactory<Site: Website>: HTMLFactory {
     .lang(context.site.language),
     .head(for: index, on: context.site, stylesheetPaths: stylesheetPaths + additionalStylesheetPaths),
     .body(
-      .header(for: context, pagePaths: pagePaths, selectedSection: selectedSection),
+      .header(for: context, pagePaths: pagePaths, navigationLinks: navigationLinks, selectedSection: selectedSection),
       .ul(.id("item-list"),
         .forEach(context.allItems(sortedBy: \.date, order: .descending)) { item in
           .li(
@@ -106,7 +114,7 @@ private extension Content.Body {
 }
 
 private extension Node where Context == HTML.BodyContext {
-  static func header<Site: Website>(for context: PublishingContext<Site>, pagePaths: [Path] = [], selectedSection: Site.SectionID? = nil, selectedPage: Page? = nil) -> Node {
+  static func header<Site: Website>(for context: PublishingContext<Site>, pagePaths: [Path] = [], navigationLinks: [DefaultNavigationLink] = [], selectedSection: Site.SectionID? = nil, selectedPage: Page? = nil) -> Node {
     .header(
       .h1(.text(context.site.name)),
       .h2(.text(context.site.description)),
@@ -125,6 +133,9 @@ private extension Node where Context == HTML.BodyContext {
             .href(page.path),
             .text(page.content.title.uppercased())
           ))
+        },
+        .forEach(navigationLinks) { link in
+          .li(.a(.target(.blank), .href(link.url), .text(link.name.uppercased())))
         }
       ))
     )
