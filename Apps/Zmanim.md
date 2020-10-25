@@ -4,4 +4,4 @@ link: https://apps.apple.com/us/app/zmanim-for-yu/id1071006216
 order: 1
 
 ---
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean in sem nisi. Duis dapibus accumsan nunc eu semper. Maecenas non lectus in orci pretium pellentesque quis auctor lacus. Donec molestie blandit aliquam. Etiam varius sem lacus, in gravida risus eleifend vel. Cras sed dignissim nibh, quis gravida dui. Cras feugiat libero dui, ut euismod massa semper quis. Donec turpis metus, molestie ac congue ac, placerat eu risus. Donec rutrum sapien vel mauris lacinia, sit amet porttitor neque dapibus. Aenean eleifend sollicitudin lacinia. Ut non sapien ac sapien dapibus tincidunt. Phasellus eu diam id magna eleifend ultricies.
+[Yeshiva University](https://www.yu.edu) is a prestigious Orthodox Jewish school located in Manhattan's Washington Heights. Everyday numerous [*minyanim*](https://en.wikipedia.org/wiki/Minyan) take place in many different locations and times. Zmanim aims to simplify finding the one that suits your needs throughout the day with a full list of all the times and their respective locations.
