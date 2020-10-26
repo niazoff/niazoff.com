@@ -54,9 +54,9 @@ private struct DefaultHTMLFactory<Site: Website>: HTMLFactory {
     .head(for: item, on: context.site, stylesheetPaths: stylesheetPaths + additionalStylesheetPaths),
     .body(
       .header(for: context, pagePaths: pagePaths, navigationLinks: navigationLinks, selectedSection: item.sectionID),
-      .div(.class("content"), .id("item-page-content"),
+      .main(.class("content"), .id("item-page-content"),
         .h1(.text(item.title)),
-        .h2(.id("item-page-date"),
+        .div(.id("item-page-date"),
             .text(DateFormatter.localizedString(from: item.date, dateStyle: .full, timeStyle: .none))),
         .contentBody(item.body.removingH1())
       ),
@@ -70,7 +70,7 @@ private struct DefaultHTMLFactory<Site: Website>: HTMLFactory {
     .head(for: page, on: context.site, stylesheetPaths: stylesheetPaths + additionalStylesheetPaths),
     .body(
       .header(for: context, pagePaths: pagePaths, navigationLinks: navigationLinks, selectedPage: page),
-      .div(.id("page"), .if(contentPagePaths.contains(page.path), .class("content")),
+      .main(.id("page"), .if(contentPagePaths.contains(page.path), .class("content")),
         .contentBody(page.body.removingH1())),
       .div(.class("spacer")),
       .footer(copyright: copyright, twitterURL: twitterURL, githubURL: githubURL)
@@ -85,18 +85,18 @@ private struct DefaultHTMLFactory<Site: Website>: HTMLFactory {
     .head(for: index, on: context.site, stylesheetPaths: stylesheetPaths + additionalStylesheetPaths),
     .body(
       .header(for: context, pagePaths: pagePaths, navigationLinks: navigationLinks, selectedSection: selectedSection),
-      .ul(.id("item-list"),
+      .main(.ul(.id("item-list"),
         .forEach(context.allItems(sortedBy: \.date, order: .descending)) { item in
           .li(
-            .h3(.a(
+            .div(.class("item-title"), .a(
               .href(item.path),
               .text(item.title)
             )),
-            .h4(.text(DateFormatter.localizedString(from: item.date, dateStyle: .full, timeStyle: .none))),
+            .div(.class("item-date"), .text(DateFormatter.localizedString(from: item.date, dateStyle: .full, timeStyle: .none))),
             .p(.text(item.description)),
             .a(.class("read-more"), .href(item.path), .text("Read more..."))
           )
-        }),
+        })),
       .div(.class("spacer")),
       .footer(copyright: copyright, twitterURL: twitterURL, githubURL: githubURL)
     )
@@ -116,8 +116,8 @@ private extension Content.Body {
 private extension Node where Context == HTML.BodyContext {
   static func header<Site: Website>(for context: PublishingContext<Site>, pagePaths: [Path] = [], navigationLinks: [DefaultNavigationLink] = [], selectedSection: Site.SectionID? = nil, selectedPage: Page? = nil) -> Node {
     .header(
-      .h1(.text(context.site.name)),
-      .h2(.text(context.site.description)),
+      .div(.id("title"), .text(context.site.name)),
+      .div(.id("subtitle"), .text(context.site.description)),
       .div(.class("divider")),
       .nav(.ul(
         .forEach(Site.SectionID.allCases) { section in

@@ -43,17 +43,18 @@ header {
   padding-top: 20px;
 }
 
-header h1 {
+#title {
   font-family:
     sofia-pro,
     ui-sans-serif,
     -apple-system,
     BlinkMacSystemFont,
     sans-serif;
+  font-weight: bold;
   font-size: 2.5em;
 }
 
-header h2 {
+#subtitle {
   font-family:
     brandon-grotesque,
     ui-sans-serif,
@@ -112,24 +113,25 @@ a:link, a:hover, a:active, a:visited {
   margin-bottom: 60px;
 }
 
-#item-list h3 {
+.item-title {
   font-family:
     sofia-pro,
     ui-sans-serif,
     -apple-system,
     BlinkMacSystemFont,
     sans-serif;
+  font-weight: bold;
   font-size: 3.25em;
   line-height: 1;
   margin-bottom: 0.2em;
 }
 
-#item-list h3 a:hover, #item-list h3 a:active {
+.item-title a:hover, .item-title a:active {
   text-decoration: underline;
   text-decoration-thickness: 0.09em;
 }
 
-#item-list h4 {
+.item-date {
   font-family:
     sofia-pro,
     ui-sans-serif,
