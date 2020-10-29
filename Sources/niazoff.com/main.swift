@@ -2,7 +2,6 @@ import Foundation
 import Publish
 import Plot
 import SplashPublishPlugin
-import CNAMEPublishPlugin
 import SwiftExtensions
 
 enum niazoff {
@@ -31,10 +30,8 @@ try niazoff.com().publish(withTheme: .default(
   copyright: "Natanel Niazoff",
   twitterURL: "https://twitter.com/niazoff",
   githubURL: "https://github.com/niazoff"
-), deployedUsing: .gitHub("niazoff/niazoff.com-release", useSSH: false),
-additionalSteps: [
+), additionalSteps: [
   .addAppMarkdownFiles()
 ], plugins: [
-  .splash(withClassPrefix: ""),
-  .generateCNAME(with: "niazoff.com")
+  .splash(withClassPrefix: "")
 ])

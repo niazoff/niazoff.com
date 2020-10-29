@@ -39,3 +39,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: release
           publish_dir: ./Output
+          cname: niazoff.com
