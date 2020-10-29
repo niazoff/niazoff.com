@@ -102,8 +102,7 @@ a:link, a:hover, a:active, a:visited {
 }
 
 #item-list {
-  max-width: 1000px;
-  padding: 0 40px;
+  max-width: min(90%, 850px);
   margin: 0 auto;
 }
 
@@ -163,9 +162,7 @@ a.read-more {
 
 .content {
   line-height: 1.5;
-  width: 100%;
-  max-width: 1000px;
-  padding: 0 40px;
+  max-width: min(90%, 850px);
   margin: 0 auto;
   margin-bottom: 40px;
 }
@@ -175,7 +172,13 @@ a.read-more {
 }
 
 .content ul, .content ol {
-  padding-left: 1.25em;
+  padding-left: 2.5em;
+}
+
+.content img {
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
 }
 
 .content code {
@@ -190,7 +193,7 @@ a.read-more {
 .content pre code {
   display: block;
   line-height: 1.5;
-  border-radius: 20px;
+  border-radius: 14px;
   padding: 20px;
   white-space: pre;
   overflow-x: auto;
@@ -247,6 +250,7 @@ a.read-more {
 }
 
 #item-page-date {
+  display: block;
   text-align: center;
   font-family:
     sofia-pro,

@@ -54,12 +54,12 @@ private struct DefaultHTMLFactory<Site: Website>: HTMLFactory {
     .head(for: item, on: context.site, stylesheetPaths: stylesheetPaths + additionalStylesheetPaths),
     .body(
       .header(for: context, pagePaths: pagePaths, navigationLinks: navigationLinks, selectedSection: item.sectionID),
-      .main(.class("content"), .id("item-page-content"),
+      .main(.article(.class("content"), .id("item-page-content"),
         .h1(.text(item.title)),
-        .div(.id("item-page-date"),
-            .text(DateFormatter.localizedString(from: item.date, dateStyle: .full, timeStyle: .none))),
+        .element(named: "time", nodes: [.id("item-page-date"),
+            .text(DateFormatter.localizedString(from: item.date, dateStyle: .full, timeStyle: .none))]),
         .contentBody(item.body.removingH1())
-      ),
+      )),
       .div(.class("spacer")),
       .footer(copyright: copyright, twitterURL: twitterURL, githubURL: githubURL)
     )
@@ -85,18 +85,19 @@ private struct DefaultHTMLFactory<Site: Website>: HTMLFactory {
     .head(for: index, on: context.site, stylesheetPaths: stylesheetPaths + additionalStylesheetPaths),
     .body(
       .header(for: context, pagePaths: pagePaths, navigationLinks: navigationLinks, selectedSection: selectedSection),
-      .main(.ul(.id("item-list"),
+      .ul(.id("item-list"),
         .forEach(context.allItems(sortedBy: \.date, order: .descending)) { item in
           .li(
             .div(.class("item-title"), .a(
               .href(item.path),
               .text(item.title)
             )),
-            .div(.class("item-date"), .text(DateFormatter.localizedString(from: item.date, dateStyle: .full, timeStyle: .none))),
+            .div(.class("item-date"),
+                 .text(DateFormatter.localizedString(from: item.date, dateStyle: .full, timeStyle: .none))),
             .p(.text(item.description)),
             .a(.class("read-more"), .href(item.path), .text("Read more..."))
           )
-        })),
+        }),
       .div(.class("spacer")),
       .footer(copyright: copyright, twitterURL: twitterURL, githubURL: githubURL)
     )
@@ -148,7 +149,7 @@ private extension Node where Context == HTML.BodyContext {
       .div(.class("divider")),
       .div(.id("footer-content"),
         .unwrap(dateFormatter.string(from: Date())) {
-          .p("Copyright © \($0) \(copyright). All rights reserved.")
+          .p("Copyright © \($0) \(copyright)")
         },
         .div(
           .unwrap(twitterURL) { .a(.class("social-icon"), .target(.blank), .href($0), .img(.src("/DefaultTheme/twitter.svg"))) },
