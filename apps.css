@@ -1,0 +1,61 @@
+#apps-list li {
+  width: 100%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  padding: 0 20px;
+  margin-bottom: 60px;
+}
+
+#apps-list li.reverse {
+  flex-direction: row-reverse;
+}
+
+.app-details {
+  text-align: right;
+  position: sticky;
+  top: 40px;
+  max-width: 500px;
+  flex: 1 0 275px;
+  margin: 40px 20px 60px;
+}
+
+.reverse .app-details {
+  text-align: left;
+}
+
+.app-details h2 {
+  font-family:
+    sofia-pro,
+    ui-sans-serif,
+    -apple-system,
+    BlinkMacSystemFont,
+    ans-serif;
+  font-size: 3.25em;
+  line-height: 1;
+  margin-bottom: 0.2em;
+}
+
+.app-description {
+  line-height: 1.25;
+  margin-bottom: 15px;
+}
+
+.app-description a {
+  text-decoration: underline;
+}
+
+.app-image {
+  max-width: min(90vw, 450px);
+  margin: -20px 20px 0;
+}
+
+@media (max-width: 844px) {
+  .app-details, .reverse .app-details {
+    text-align: center;
+    position: static;
+    max-width: min(95vw, 650px);
+    margin-top: 0px;
+  }
+}
