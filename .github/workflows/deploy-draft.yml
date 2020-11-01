@@ -34,8 +34,8 @@ jobs:
       - run: publish-cli generate
 
       - name: Deploy to Netlify
-      uses: netlify/actions/cli@master
-      with:
-        args: deploy --dir=Output
-      env:
-        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        uses: netlify/actions/cli@master
+        with:
+          args: deploy --dir=Output
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
