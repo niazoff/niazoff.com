@@ -7,7 +7,9 @@ on:
 
 jobs:
   deploy:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
+    container:
+      image: "swift:5.3"
     steps:
       - uses: actions/checkout@v2
 
