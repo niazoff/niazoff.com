@@ -2,11 +2,10 @@ import Foundation
 import Publish
 import Plot
 import SplashPublishPlugin
-import SwiftExtensions
 
 enum niazoff {
   struct com: Website {
-    var url = URL(string: "https://niazoff.com") ?? preconditionFailure()
+    var url = URL(string: "https://niazoff.com")!
     var name = "Natanel Niazoff"
     var description = "Sharing my interests in Swift, iOS, Apple & more"
     var language: Language { .english }

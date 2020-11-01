@@ -81,15 +81,6 @@
           "revision": "801c2878e4c6c5baf32fe132e1f3f3af6f9fd1b0",
           "version": "0.4.0"
         }
-      },
-      {
-        "package": "SwiftExtensions",
-        "repositoryURL": "https://github.com/niazoff/SwiftExtensions.git",
-        "state": {
-          "branch": "master",
-          "revision": "b2861f5200bedd82e9e1cf381344f21ed105628a",
-          "version": null
-        }
       }
     ]
   },
