@@ -9,7 +9,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     container:
-      image: "swift:5.3"
+      image: "swift:5.2"
     steps:
       - uses: actions/checkout@v2
 
