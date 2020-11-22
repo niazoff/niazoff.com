@@ -1,5 +1,5 @@
 ---
-date: 2020/11/22 9:00
+date: 2020-11-22 9:00
 description: This site was written in Swift. Yes, the same language iOS apps are written in. Continue reading to learn how you too can create a site like this one using a framework called Publish. We'll go from setting up the command line tool and creating the site, adding sections and items with content, writing a custom theme driven by the powerful Plot framework to finally deploying the site to GitHub Pages and even automating the process so your public site will always be in sync with your repo.
 ---
 
