@@ -167,6 +167,15 @@ a.read-more {
   margin-bottom: 40px;
 }
 
+.content h2 {
+  text-align: center;
+  margin-bottom: 0.5em;
+}
+
+.content p {
+  margin-bottom: 1.5em;
+}
+
 .content a {
   text-decoration: underline;
 }
@@ -176,9 +185,12 @@ a.read-more {
 }
 
 .content img {
-  width: 100%;
+  display: block;
+  max-width: 100%;
   height: auto;
   border-radius: 14px;
+  margin: 0 auto;
+  margin-bottom: 1.5em;
 }
 
 .content code {
@@ -198,6 +210,7 @@ a.read-more {
   white-space: pre;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  margin-bottom: 1.5em;
 }
 
 .content pre code .keyword {
@@ -234,6 +247,16 @@ a.read-more {
 
 .content pre code .preprocessing {
   color: var(--code-preprocessing-color);
+}
+
+.content .twitter-tweet {
+  width: 400px;
+  margin: 0 auto;
+  margin-bottom: 1.5em;
+}
+
+.content .embedly-card {
+  margin-bottom: 1.5em;
 }
 
 #item-page-content h1 {

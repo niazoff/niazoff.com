@@ -117,7 +117,7 @@ private extension Content.Body {
 private extension Node where Context == HTML.BodyContext {
   static func header<Site: Website>(for context: PublishingContext<Site>, pagePaths: [Path] = [], navigationLinks: [DefaultNavigationLink] = [], selectedSection: Site.SectionID? = nil, selectedPage: Page? = nil) -> Node {
     .header(
-      .div(.id("title"), .text(context.site.name)),
+      .div(.id("title"), .a(.href("/"), .text(context.site.name))),
       .div(.id("subtitle"), .text(context.site.description)),
       .div(.class("divider")),
       .nav(.ul(
