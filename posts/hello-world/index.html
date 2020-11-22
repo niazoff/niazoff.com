@@ -1,0 +1,145 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><meta name="og:site_name" content="Natanel Niazoff"/><link rel="canonical" href="https://niazoff.com/posts/hello-world"/><meta name="twitter:url" content="https://niazoff.com/posts/hello-world"/><meta name="og:url" content="https://niazoff.com/posts/hello-world"/><title>Hello World: Building a site in Swift with Publish | Natanel Niazoff</title><meta name="twitter:title" content="Hello World: Building a site in Swift with Publish | Natanel Niazoff"/><meta name="og:title" content="Hello World: Building a site in Swift with Publish | Natanel Niazoff"/><meta name="description" content="This site was written in Swift. Yes, the same language iOS apps are written in. Continue reading to learn how you too can create a site like this one using a framework called Publish. We'll go from setting up the command line tool and creating the site, adding sections and items with content, writing a custom theme driven by the powerful Plot framework to finally deploying the site to GitHub Pages and even automating the process so your public site will always be in sync with your repo."/><meta name="twitter:description" content="This site was written in Swift. Yes, the same language iOS apps are written in. Continue reading to learn how you too can create a site like this one using a framework called Publish. We'll go from setting up the command line tool and creating the site, adding sections and items with content, writing a custom theme driven by the powerful Plot framework to finally deploying the site to GitHub Pages and even automating the process so your public site will always be in sync with your repo."/><meta name="og:description" content="This site was written in Swift. Yes, the same language iOS apps are written in. Continue reading to learn how you too can create a site like this one using a framework called Publish. We'll go from setting up the command line tool and creating the site, adding sections and items with content, writing a custom theme driven by the powerful Plot framework to finally deploying the site to GitHub Pages and even automating the process so your public site will always be in sync with your repo."/><meta name="twitter:card" content="summary"/><link rel="stylesheet" href="/DefaultTheme/styles.css" type="text/css"/><link rel="stylesheet" href="https://use.typekit.net/fof8oqj.css" type="text/css"/><link rel="stylesheet" href="/apps.css" type="text/css"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link rel="shortcut icon" href="/images/favicon.png" type="image/png"/><link rel="alternate" href="/feed.rss" type="application/rss+xml" title="Subscribe to Natanel Niazoff"/></head><body><header><div id="title"><a href="/">Natanel Niazoff</a></div><div id="subtitle">Sharing my interests in Swift, iOS, Apple &amp; more</div><div class="divider"></div><nav><ul><li><a class="selected" href="/">POSTS</a></li><li><a href="/apps">APPS</a></li><li><a href="/about">ABOUT</a></li><li><a target="_blank" href="https://s3.amazonaws.com/niazoff.com/resume.pdf">RÉSUMÉ</a></li></ul></nav></header><main><article class="content" id="item-page-content"><h1>Hello World: Building a site in Swift with Publish</h1><time id="item-page-date">Sunday, November 22, 2020</time><p>Welcome to my new site built almost (save some CSS) entirely in Swift using John Sundell’s <a href="https://github.com/JohnSundell/Publish">Publish</a> static site generator. John is the guy behind <a href="https://swiftbysundell.com">swiftbysundell.com</a> and many more resources cherished by the iOS community. If you’re anything like me, you’ve been through multiple phases of sites built in ways ranging from raw HTML, Vapor Leaf to, possibly, Apple’s old iWeb app. Remember that? Maybe you’ve tried other generators like Jekyll or Hugo. Nothing has felt as natural to me as a Swift developer until now with Publish.</p><h2>Static sites vs. dynamic sites</h2><p>First, what does “static” mean and when do you use it instead of a “dynamic” website? If you’re looking to build a chat web app or an online store that relies on a database, you’re gonna need a server constantly updating the user with the appropriate information. That makes the site dynamic. The server is building files as needed and sending them your way. I’d recommend using <a href="https://vapor.codes">Vapor</a> for that type of task. Contrast that with a static site that is just a bunch of files that are all prebuilt and waiting to be shown once you navigate to them. Static sites are <a href="https://www.netlify.com/blog/2016/05/18/9-reasons-your-site-should-be-static">faster, safer and cheaper</a> to name a few but if every time you wanted to make a change to your header, for example, you’d need to edit each file, that would get extremely tedious and error-prone. That’s where static site generators like Publish come in. In no way does Publish aim to replace HTML or CSS. Instead, it makes writing it a whole lot easier and enjoyable. Generating a site with Publish is as easy as entering <code>publish generate</code> in the command line and it takes your Swift code and creates all those static HTML files for you that you can host wherever you’d like.</p><h2>Plot</h2><p>You create the HTML using <a href="https://github.com/JohnSundell/Plot">Plot</a>, a type-safe <a href="https://en.wikipedia.org/wiki/Domain-specific_language">domain-specific language</a> or DSL that's included together with Publish. This means <code>.h1(“Hello world”)</code> will be generated as <code>&lt;h1&gt;Hello world&lt;/h1&gt;</code> and will make sure you’re only able to put values in there that make sense. Try throwing an <code>li</code> element in there and you’ll get a compile time error. This also allows Xcode to provide autocomplete suggestions while typing your code. Later, we’ll make use of Plot to create a theme which is the backbone of our site generation.</p><h2>Step 1: Install Publish CLI</h2><p>It’s really easy to start a new project using the Publish command line tool. First, open Terminal and clone the Publish repository. Then, in the cloned folder, run <code>make</code>.</p><pre><code class="language-no-highlight">$ git clone https://github.com/JohnSundell/Publish.git
+$ cd Publish
+$ make
+</code></pre><h2>Step 2: Create a new website</h2><p>Now, all you have to do is create your website directory wherever you wish, change to that directory and enter <code>publish new</code>. We’re going to create a site which details our travels across the world.</p><pre><code class="language-no-highlight">$ mkdir MyTravels
+$ cd MyTravels
+$ publish new
+</code></pre><p>At this point, you can open the project up in Xcode by entering <code>open Package.swift</code> and get started on the site. The first thing you'll notice is, of course, the website's <a href="https://swift.org/package-manager">package</a>. At its core, a Publish site is just a Swift package which means you could include any other dependencies you'd like besides the necessary Publish one. The next thing you'll notice is the generated file structure. What are all these directories and files you ask? Let's dive right in.</p><img src="/posts/hello-world/file-structure.png" alt="file-structure"/><h2>Step 3: Publish site in <code>main.swift</code></h2><p>Conforming with the file structure of a Swift package, Publish created a <code>main.swift</code> file in the <code>MyTravels</code> target directory of the <code>Sources</code> directory to serve as the executable of our website as specified in our package. Open that up and you'll see our website's core code. Publish already created a <code>struct</code> that conforms to <code>Website</code> and filled in the required properties and types. I've updated the information to better match what we'd like our website to contain. Namely, articles about countries and cities we've visited.</p><pre><code><span class="keyword">struct</span> MyTravels: <span class="type">Website</span> {
+  <span class="keyword">enum</span> SectionID: <span class="type">String</span>, <span class="type">WebsiteSectionID</span> {
+    <span class="keyword">case</span> countries
+    <span class="keyword">case</span> cities
+    <span class="keyword">case</span> about
+  }
+
+  <span class="keyword">struct</span> ItemMetadata: <span class="type">WebsiteItemMetadata</span> {
+    <span class="keyword">var</span> arrivalDate: <span class="type">Date</span>
+    <span class="keyword">var</span> departureDate: <span class="type">Date</span>
+    <span class="keyword">var</span> transportation: <span class="type">Transportation</span>
+
+    <span class="keyword">enum</span> Transportation: <span class="type">String</span>, <span class="type">WebsiteItemMetadata</span> {
+      <span class="keyword">case</span> car
+      <span class="keyword">case</span> train
+      <span class="keyword">case</span> plane
+    }
+  }
+
+  <span class="keyword">var</span> url = <span class="type">URL</span>(string: <span class="string">"https://mytravels.com"</span>)!
+  <span class="keyword">var</span> name = <span class="string">"My Travels"</span>
+  <span class="keyword">var</span> description = <span class="string">"Sharing my travels across the world"</span>
+  <span class="keyword">var</span> language: <span class="type">Language</span> { .<span class="dotAccess">english</span> }
+  <span class="keyword">var</span> imagePath: <span class="type">Path</span>? { <span class="keyword">nil</span> }
+}
+</code></pre><p>A Publish site is built upon three layers of content. Firstly, a <code>Section</code> is configured by adding a case to the required <code>SectionID</code> enumeration. Once we build the HTML, sections will be displayed in the navigation element, get their own dedicated page and, if applicable, can display and link to the next crucial layer: items. An <code>Item</code> can be created within the file structure of the package as will be discussed next or programmatically as shown below. Conforming to <code>Website</code> also requires us to have an <code>ItemMetadata</code> type which can include (you guessed it) item metadata like an arrival date in our case. Of course, an HTML page can also be created to display any given item. Lastly, we can create stand-alone <code>Page</code>s like a 404 page for instance.</p><p>Finally, to publish our site there's an appropriately named <code>publish</code> function which generates our site and creates an <code>Output</code> folder with our HTML and resources.</p><pre><code><span class="keyword">try</span> <span class="type">MyTravels</span>().<span class="call">publish</span>(
+  withTheme: .<span class="dotAccess">foundation</span>,
+  additionalSteps: [
+    .<span class="call">addItem</span>(<span class="type">Item</span>(
+      path: <span class="string">"new-york-city"</span>,
+      sectionID: .<span class="dotAccess">cities</span>,
+      metadata: <span class="type">MyTravels</span>.<span class="type">ItemMetadata</span>(
+        arrivalDate: <span class="type">Date</span>(),
+        departureDate: <span class="type">Date</span>().<span class="call">addingTimeInterval</span>(<span class="number">60</span> * <span class="number">60</span> * <span class="number">24</span>),
+        transportation: .<span class="dotAccess">train</span>),
+      content: <span class="type">Content</span>(
+        title: <span class="string">"New York City"</span>,
+        description: <span class="string">"The city that never sleeps."</span>)))
+  ]
+)
+</code></pre><p>At the point, if we go back to Terminal and enter <code>publish run</code> in our website's directory and go to <code>localhost:8000</code> we'll see a page that includes our sections and the item we added previously. Pretty simple to get our site running! Without writing any HTML or CSS, Publish generated our Swift code directly into a functioning website! Indeed, we instructed Publish to do this by using the built-in <code>.foundation</code> theme. Soon, we'll see how we can create a custom theme and, subsequently, replace <code>.foundation</code> with it.</p><img src="/posts/hello-world/foundation-theme.png" alt="foundation-theme"/><h2>Step 4: Add items to <code>/Content</code></h2><h2>Ink</h2><p>Thus far, we've seen how to add an item programmatically. Publish can also convert <a href="https://daringfireball.net/projects/markdown">Markdown</a> files placed into the <code>Content</code> folder into items automatically for you. Publish utilizes another dependency called <a href="https://github.com/JohnSundell/Ink">Ink</a> to handle this but you don't need to interact with it directly. First, create a directory matching the name of the section you want to add items to. Then, create a Markdown file in that folder which, in our case, will be called <code>san-francisco.md</code>.</p><pre><code class="language-no-highlight">---
+description: Exploring the Golden City.
+arrivalDate: 2020-6-22 6:00
+departureDate: 2020-6-26 10:00
+transportation: plane
+---
+# San Francisco
+This city is so beautiful.
+![San Francisco](/san-francisco.jpg)
+</code></pre><p>Publish can use our H1 heading as the title of the item or you can specify one in the top metadata as such, <code>title: San Francisco</code>. We've also added a description to the metadata and included our custom metadata as detailed in our website's <code>ItemMetadata</code>. Any resources added to the <code>Resources</code> folder will be copied to the generated site and made available to use throughout our code as we did here with the image. Once we run, Publish will parse our Markdown files and use each file's path as the path on our site. If you want to specify the path regardless of the your own file path just add <code>path: path/to/your/item</code> to the metadata although it still needs to have a parent folder with the section's name. Optionally, the <code>Content</code> folder can include an <code>index.md</code> file with content we'd like to display on the website's home page. Furthermore, each section's folder can also include its own <code>index.md</code> file with content it would like to show on its page like at <code>mytavels.com/cities</code> for example. Presumably, you'd also include the section's list of items on a page similar to that one. Finally, free-form pages can be added as well by adding a Markdown file named as whatever you'd like to the <code>Content</code> directory.</p><h2>Step 5: Create a custom theme</h2><p>If we want Publish to generate our website with our own HTML and styling we need to create a theme. A theme is powered by a type that conforms to <code>HTMLFactory</code>. The protocol requires us to implement six methods that provide an <code>HTML</code> value for the various pages Publish needs to render. We'll implement the method for creating the main index page, <code>makeIndexHTML(for index: Index, context: PublishingContext&lt;MyTravels&gt;)</code>, here and, for the rest, you can return an empty <code>HTML</code> value for now like so, <code>HTML()</code>. Let's start by simply returning "Hello World" for the index HTML and make sure everything works.</p><pre><code><span class="keyword">struct</span> BasicHTMLFactory: <span class="type">HTMLFactory</span> {
+  <span class="keyword">func</span> makeIndexHTML(for index: <span class="type">Index</span>, context: <span class="type">PublishingContext</span>&lt;<span class="type">MyTravels</span>&gt;) <span class="keyword">throws</span> -&gt; <span class="type">HTML</span> {
+    <span class="type">HTML</span>(<span class="string">"Hello World"</span>)
+  }
+  ...
+}
+</code></pre><p>Next, we'll create a theme using our factory type.</p><pre><code><span class="keyword">extension</span> <span class="type">Theme</span> <span class="keyword">where</span> <span class="type">Site</span> == <span class="type">MyTravels</span> {
+  <span class="keyword">static var</span> basic: <span class="type">Self</span> {
+    <span class="type">Theme</span>(htmlFactory: <span class="type">BasicHTMLFactory</span>())
+  }
+}
+</code></pre><p>Finally, update the theme to publish with to <code>.basic</code>.</p><pre><code><span class="keyword">try</span> <span class="type">MyTravels</span>().<span class="call">publish</span>(
+  withTheme: .<span class="dotAccess">basic</span>,
+  ...
+)
+</code></pre><p>Now if you run again and reload the the site you should see <code>Hello World</code>! Next, let's write some simple HTML to display our actual website data which is made available through <code>context</code>.</p><pre><code><span class="keyword">func</span> makeIndexHTML(for index: <span class="type">Index</span>, context: <span class="type">PublishingContext</span>&lt;<span class="type">MyTravels</span>&gt;) <span class="keyword">throws</span> -&gt; <span class="type">HTML</span> {
+  <span class="type">HTML</span>(
+    .<span class="call">lang</span>(context.<span class="property">site</span>.<span class="property">language</span>),
+    .<span class="call">head</span>(for: index, on: context.<span class="property">site</span>),
+    .<span class="call">body</span>(
+      <span class="comment">// Header</span>
+      .<span class="call">h1</span>(.<span class="call">text</span>(context.<span class="property">site</span>.<span class="property">name</span>)),
+      .<span class="call">h2</span>(.<span class="call">text</span>(context.<span class="property">site</span>.<span class="property">description</span>)),
+      <span class="comment">// Navigation</span>
+      .<span class="call">nav</span>(.<span class="call">ul</span>(
+        .<span class="call">forEach</span>(<span class="type">Site</span>.<span class="type">SectionID</span>.<span class="property">allCases</span>) { section <span class="keyword">in</span>
+          .<span class="call">li</span>(.<span class="call">a</span>(
+            .<span class="call">href</span>(context.<span class="property">sections</span>[section].path),
+            .<span class="call">text</span>(context.<span class="property">sections</span>[section].title)
+          ))
+        }
+      )),
+      <span class="comment">// Items</span>
+      .<span class="call">ul</span>(.<span class="call">forEach</span>(context.<span class="call">allItems</span>(sortedBy: \.<span class="property">date</span>, order: .<span class="dotAccess">descending</span>)) { item <span class="keyword">in</span>
+        .<span class="call">li</span>(
+          .<span class="call">a</span>(
+            .<span class="call">href</span>(item.<span class="property">path</span>),
+            .<span class="call">text</span>(item.<span class="property">title</span>)
+          ),
+          .<span class="call">p</span>(.<span class="call">text</span>(item.<span class="property">description</span>))
+        )
+      })
+    )
+  )
+}
+</code></pre><p>If you're familiar with HTML, the above should be pretty straightforward. Besides the usual HTML elements, we can also make use of additional powerful ones like <code>.forEach</code> as we do here. Currently, CSS still needs to be written manually in a <code>.css</code> file, stored in <code>Resources</code> and specified in the <code>.head</code> element. Fortunately, John is <a href="https://twitter.com/johnsundell/status/1316670160137269250">working</a> on a "SwiftUI inspired" update to Plot with type-safe CSS support and even has a <a href="https://twitter.com/johnsundell/status/1322149405793935362">running prototype</a>!</p><blockquote class="twitter-tweet" data-theme="dark"><p lang="en" dir="ltr">Xcode Previews + Plot&#39;s new SwiftUI-inspired Component API = Type-safe, live-updating HTML + CSS! 😍<br><br>(still just a prototype, and updates are a bit slow while I&#39;m also recording my screen, but I&#39;m really starting to get excited about the potential of this! 😀) <a href="https://t.co/XoWjr6vfWa">pic.twitter.com/XoWjr6vfWa</a></p>&mdash; John Sundell (@johnsundell) <a href="https://twitter.com/johnsundell/status/1322149405793935362?ref_src=twsrc%5Etfw">October 30, 2020</a></blockquote><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script><h2>Step 6: Deploy! 🎉</h2><p>Last but not least, let's deploy our website so it's available online. Like everything else with Publish, it's of course really simple. We're going to be using GitHub Pages so, if you're not familiar, <a href="https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/creating-a-github-pages-site">read this first</a>. Once you have your Pages repo ready, all you need to do is add it to the publish method with your username and the repo's name. We're going to skip using SSH here.</p><pre><code><span class="keyword">try</span> <span class="type">MyTravels</span>().<span class="call">publish</span>(
+	...
+  deployedUsing: .<span class="call">gitHub</span>(<span class="string">"yourUsername/MyTravels"</span>, useSSH: <span class="keyword">false</span>),
+  ...
+)
+</code></pre><p>Back in Terminal, simply enter <code>publish deploy</code> and once it's done, if you set up Pages correctly, you should have a running website available to the world! Congratulations! 🍾</p><p>It's at this point building my own site that I realized I would need to manage two repos. One for my site's Swift code and one for Pages. That didn't feel right knowing that you can choose a branch for Pages to use in an existing repo, and naturally, that's what I wanted to do. It turns out that there's a <a href="https://github.com/JohnSundell/Publish/commit/81859a8ff1c500e297530df34cd18d4406aecd39">recent commit</a> to the Publish repo that allows this (currently it only deploys to <code>master</code>) but it hasn't been added to a new Publish release yet. I attempted to use Publish's <code>master</code> branch in my package and use the feature but it didn't work for me. However, it doesn't matter since there's a better way to get it done and that entails some automation.</p><blockquote class="reddit-card" data-card-created="1605781060"><a href="https://www.reddit.com/r/ProgrammerHumor/comments/f0ag3i/automation/">Automation</a> from <a href="http://www.reddit.com/r/ProgrammerHumor">r/ProgrammerHumor</a></blockquote><script async src="//embed.redditmedia.com/widgets/platform.js" charset="UTF-8"></script><p>Having to run <code>publish deploy</code> every time you commit changes to your site can get repetitive and pretty cumbersome. Furthermore, say you commit changes to your site <a href="https://workingcopyapp.com">from an iPad</a> and, of course, you want those changes to be reflected on your public site. Currently, you need to go back to you Mac, open Terminal and, once again, enter <code>publish deploy</code>. <a href="https://github.com/features/actions">GitHub Actions</a> is our friend in this case. Now, whenever you commit changes to your site’s repo, GitHub will run a workflow to generate your site, store the output in a separate branch and Pages will make that available. All this means we never need to run <code>publish deploy</code> ourselves and don’t even need to include <code>deployedUsing</code> in our publish method. Our workflow will simply run <code>publish generate</code> which creates the <code>Output</code> folder and then copy that data to our Pages branch.</p><p>First, create a repo for your site’s Swift code if you haven’t already. Now, we need to make an empty branch for our public site like so, <code>git checkout --orphan release</code>. I’ve named it <code>release</code> but name it whatever you wish. Next, remove all staged files, <code>git rm -rf .</code>. You need to create a commit as you can’t push an empty branch, <code>git commit --allow-empty -m "Initial commit"</code>. Finally, push your empty branch, <code>git push origin release</code>. Once that’s fully uploaded, set up GitHub Pages with the source as our <code>release</code> branch. Now, back in your site’s <code>master</code> branch in Terminal, create a <code>.github/workflows</code> directory with a <code>.yml</code> file inside (<code>deploy.yml</code> for example). We’re going to make use of a workflow detailed <a href="https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-swift-publish">here</a>. Set the <code>publish_branch</code> at the bottom to your Pages branch.</p><pre><code class="language-no-highlight">name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/Publish_build
+            .build
+          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
+      - name: Setup JohnSundell/Publish
+        run: |
+          cd ${HOME}
+          export PUBLISH_VERSION="0.7.0"
+          git clone https://github.com/JohnSundell/Publish.git
+          cd ./Publish &amp;&amp; git checkout ${PUBLISH_VERSION}
+          mv ~/Publish_build .build || true
+          swift build -c release
+          cp -r .build ~/Publish_build || true
+          echo "${HOME}/Publish/.build/release" &gt;&gt; ${GITHUB_PATH}
+      - run: publish-cli generate
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: release
+          publish_dir: ./Output
+</code></pre><p>Immediately, once you commit the changes, GitHub will start running the workflow as indicated by an orange dot on the latest commit. Once it finishes, it will display a green checkmark and you’ve now automated Publish! As always, automation required some invested extra time and now your site will always be up to date.</p><h2>Conclusion</h2><p>As I hope I’ve demonstrated, there’s never been a better time as an iOS and Swift developer to create a site of their own. Whether it’s a blog, app landing page or a portfolio, use the power of Swift to build it. I can’t wait to see what John dreams up for future updates and what ya’ll create as well. Please share your sites, thoughts and comments with me <a href="https://twitter.com/niazoff">@niazoff</a>. Checkout the site we built on GitHub, <a href="https://github.com/niazoff/MyTravels">MyTravels</a>, and my site, <a href="https://github.com/niazoff/niazoff.com">niazoff.com</a>.</p></article></main><div class="spacer"></div><footer><div class="divider"></div><div id="footer-content"><p>Copyright © 2020 Natanel Niazoff</p><div><a class="social-icon" target="_blank" href="https://twitter.com/niazoff"><img src="/DefaultTheme/twitter.svg"/></a><a class="social-icon" target="_blank" href="https://github.com/niazoff"><img src="/DefaultTheme/github.svg"/></a></div></div></footer></body></html>
