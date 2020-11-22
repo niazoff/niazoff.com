@@ -1,0 +1,44 @@
+name: Deploy draft
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    container:
+      image: "swift:5.2"
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/Publish_build
+            .build
+          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-\
+
+      - name: Setup JohnSundell/Publish
+        run: |
+          cd ${HOME}
+          export PUBLISH_VERSION="0.7.0"
+          git clone https://github.com/JohnSundell/Publish.git
+          cd ./Publish && git checkout ${PUBLISH_VERSION}
+          mv ~/Publish_build .build || true
+          swift build -c release
+          cp -r .build ~/Publish_build || true
+          echo "${HOME}/Publish/.build/release" >> ${GITHUB_PATH}
+
+      - run: publish-cli generate
+
+      - name: Deploy to Netlify
+        uses: netlify/actions/cli@master
+        with:
+          args: deploy --dir=Output
+        env:
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
