@@ -87,6 +87,7 @@ nav li {
     BlinkMacSystemFont,
     sans-serif;
   font-weight: 500;
+  font-size: 0.9em;
   color: var(--secondary-color);
   margin: 0 5px;
 }
