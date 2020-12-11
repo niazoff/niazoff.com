@@ -9,7 +9,7 @@ enum niazoff {
     var name = "Natanel Niazoff"
     var description = "Sharing my interests in Swift, iOS, Apple & more"
     var language: Language { .english }
-    var imagePath: Path? { nil }
+    var imagePath: Path? { "/images/website.jpeg" }
     
     enum SectionID: String, WebsiteSectionID {
       case posts
