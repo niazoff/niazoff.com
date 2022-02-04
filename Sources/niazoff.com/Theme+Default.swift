@@ -41,6 +41,8 @@ private struct DefaultHTMLFactory<Site: Website>: HTMLFactory {
   var twitterURL: URLRepresentable?
   var githubURL: URLRepresentable?
   
+  private let titleSeparator = " • "
+  
   func makeIndexHTML(for index: Index, context: PublishingContext<Site>) throws -> HTML {
     try makeIndexHTML(for: index, context: context, selectedSection: context.sections.ids.first)
   }
@@ -51,7 +53,7 @@ private struct DefaultHTMLFactory<Site: Website>: HTMLFactory {
   
   func makeItemHTML(for item: Item<Site>, context: PublishingContext<Site>) throws -> HTML { .init(
     .lang(context.site.language),
-    .head(for: item, on: context.site, stylesheetPaths: stylesheetPaths + additionalStylesheetPaths),
+    .head(for: item, on: context.site, titleSeparator: titleSeparator, stylesheetPaths: stylesheetPaths + additionalStylesheetPaths),
     .body(
       .header(for: context, pagePaths: pagePaths, navigationLinks: navigationLinks, selectedSection: item.sectionID),
       .main(.article(.class("content"), .id("item-page-content"),
@@ -67,7 +69,7 @@ private struct DefaultHTMLFactory<Site: Website>: HTMLFactory {
   
   func makePageHTML(for page: Page, context: PublishingContext<Site>) throws -> HTML { .init(
     .lang(context.site.language),
-    .head(for: page, on: context.site, stylesheetPaths: stylesheetPaths + additionalStylesheetPaths),
+    .head(for: page, on: context.site, titleSeparator: titleSeparator, stylesheetPaths: stylesheetPaths + additionalStylesheetPaths),
     .body(
       .header(for: context, pagePaths: pagePaths, navigationLinks: navigationLinks, selectedPage: page),
       .main(.id("page"), .if(contentPagePaths.contains(page.path), .class("content")),
@@ -82,7 +84,7 @@ private struct DefaultHTMLFactory<Site: Website>: HTMLFactory {
   
   private func makeIndexHTML(for index: Index, context: PublishingContext<Site>, selectedSection: Site.SectionID?) throws -> HTML { .init(
     .lang(context.site.language),
-    .head(for: index, on: context.site, stylesheetPaths: stylesheetPaths + additionalStylesheetPaths),
+    .head(for: index, on: context.site, titleSeparator: titleSeparator, stylesheetPaths: stylesheetPaths + additionalStylesheetPaths),
     .body(
       .header(for: context, pagePaths: pagePaths, navigationLinks: navigationLinks, selectedSection: selectedSection),
       .ul(.id("item-list"),
@@ -143,14 +145,10 @@ private extension Node where Context == HTML.BodyContext {
   }
   
   static func footer(copyright: String, twitterURL: URLRepresentable?, githubURL: URLRepresentable?) -> Node {
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "yyyy"
-    return .footer(
+    .footer(
       .div(.class("divider")),
       .div(.id("footer-content"),
-        .unwrap(dateFormatter.string(from: Date())) {
-          .p("Copyright © \($0) \(copyright)")
-        },
+        .p("Copyright © ", .script("document.write(new Date().getFullYear())"), " \(copyright)"),
         .div(
           .unwrap(twitterURL) { .a(.class("social-icon"), .target(.blank), .href($0), .img(.src("/DefaultTheme/twitter.svg"))) },
           .unwrap(githubURL) { .a(.class("social-icon"), .target(.blank), .href($0), .img(.src("/DefaultTheme/github.svg"))) }
